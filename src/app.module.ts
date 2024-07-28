@@ -14,55 +14,92 @@ Promise.all([import('adminjs'), import('@adminjs/prisma')]).then(
   imports: [
     ConfigModule.forRoot(),
     // AdminJS version 7 is ESM-only. In order to import it, you have to use dynamic imports.
-    Promise.all([import('@adminjs/nestjs'), import('@adminjs/prisma')]).then(
-      ([{ AdminModule }, { getModelByName }]) =>
-        AdminModule.createAdminAsync({
-          useFactory: () => {
-            const prisma = new PrismaService();
+    Promise.all([
+      import('@adminjs/nestjs'),
+      import('@adminjs/prisma'),
+      import('@adminjs/themes'),
+    ]).then(([{ AdminModule }, { getModelByName }, { dark, light }]) =>
+      AdminModule.createAdminAsync({
+        useFactory: () => {
+          const prisma = new PrismaService();
 
-            return {
-              adminJsOptions: {
-                rootPath: '/admin',
-                resources: [
-                  {
-                    resource: {
-                      model: getModelByName('Module'),
-                      client: prisma,
-                    },
-                    options: {},
+          return {
+            adminJsOptions: {
+              branding: {
+                companyName: 'Deutsch Vokabeln Admin',
+                withMadeWithLove: false,
+              },
+              defaultTheme: dark.id,
+              availableThemes: [dark, light],
+              rootPath: '/admin',
+              resources: [
+                {
+                  resource: {
+                    model: getModelByName('Module'),
+                    client: prisma,
                   },
-                  {
-                    resource: {
-                      model: getModelByName('Category'),
-                      client: prisma,
-                    },
-                    options: {},
+                  options: {
+                    navigation: {},
                   },
-                  {
-                    resource: {
-                      model: getModelByName('VocabularyItem'),
-                      client: prisma,
+                },
+                {
+                  resource: {
+                    model: getModelByName('Category'),
+                    client: prisma,
+                  },
+                  options: {
+                    navigation: {},
+                  },
+                },
+                {
+                  resource: {
+                    model: getModelByName('VocabularyItem'),
+                    client: prisma,
+                  },
+                  options: {
+                    navigation: {},
+                    sort: {
+                      sortBy: 'id',
                     },
-                    options: {
-                      properties: {
-                        word: {
-                          type: 'richtext',
-                        },
+                    listProperties: [
+                      'word',
+                      'plural',
+                      'meaning',
+                      'ranking',
+                      'category',
+                      'level',
+                    ],
+                    editProperties: [
+                      'word',
+                      'plural',
+                      'ranking',
+                      'meaning',
+                      'exampleSentence',
+                      'category',
+                      'level',
+                    ],
+                    properties: {
+                      word: {
+                        type: 'richtext',
+                        isTitle: true,
                       },
                     },
                   },
-                  {
-                    resource: {
-                      model: getModelByName('VocabularyItemLevel'),
-                      client: prisma,
-                    },
-                    options: {},
+                },
+                {
+                  resource: {
+                    model: getModelByName('VocabularyItemLevel'),
+                    client: prisma,
                   },
-                ],
-              },
-            };
-          },
-        }),
+                  options: {
+                    navigation: {},
+                  },
+                },
+              ],
+            },
+          };
+        },
+      }),
     ),
   ],
   controllers: [AppController],
