@@ -3,13 +3,21 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "postgresql"
     url      = env("DATABASE_URL")
+}
+
+enum VocabularyItemLevel {
+    A1_2
+    B1_2
 }
 
 model Module {
     id   Int    @id @default(autoincrement())
     name String
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
 
     categories Category[]
 }
@@ -20,27 +28,24 @@ model Category {
     moduleId Int
     module   Module @relation(fields: [moduleId], references: [id])
 
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
+
     vocabularyItems VocabularyItem[]
 }
 
 model VocabularyItem {
-    id              Int     @id @default(autoincrement())
+    id              Int                 @id @default(autoincrement())
     word            String
     meaning         String
     ranking         Int
     plural          String?
     exampleSentence String?
+    level           VocabularyItemLevel
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
 
     categoryId Int
     category   Category @relation(fields: [categoryId], references: [id])
-
-    vocabularyItemLevelId Int
-    level                 VocabularyItemLevel @relation(fields: [vocabularyItemLevelId], references: [id])
-}
-
-model VocabularyItemLevel {
-    id             Int              @id @default(autoincrement())
-    slug           String
-    name           String
-    VocabularyItem VocabularyItem[]
 }

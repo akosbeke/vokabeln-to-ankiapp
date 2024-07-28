@@ -86,15 +86,6 @@ Promise.all([import('adminjs'), import('@adminjs/prisma')]).then(
                     },
                   },
                 },
-                {
-                  resource: {
-                    model: getModelByName('VocabularyItemLevel'),
-                    client: prisma,
-                  },
-                  options: {
-                    navigation: {},
-                  },
-                },
               ],
             },
           };
