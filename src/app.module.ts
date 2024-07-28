@@ -29,6 +29,9 @@ Promise.all([import('adminjs'), import('@adminjs/prisma')]).then(
                 companyName: 'Deutsch Vokabeln Admin',
                 withMadeWithLove: false,
               },
+              settings: {
+                defaultPerPage: 30,
+              },
               defaultTheme: dark.id,
               availableThemes: [dark, light],
               rootPath: '/admin',
@@ -82,6 +85,12 @@ Promise.all([import('adminjs'), import('@adminjs/prisma')]).then(
                       word: {
                         type: 'richtext',
                         isTitle: true,
+                      },
+                      level: {
+                        availableValues: [
+                          { value: 'A1_2', label: 'A-level' },
+                          { value: 'B1_2', label: 'B-level' },
+                        ],
                       },
                     },
                   },
