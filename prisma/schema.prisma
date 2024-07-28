@@ -8,8 +8,8 @@ datasource db {
 }
 
 model Module {
-    id    Int    @id @default(autoincrement())
-    email String
+    id   Int    @id @default(autoincrement())
+    name String
 
     categories Category[]
 }
@@ -33,4 +33,14 @@ model VocabularyItem {
 
     categoryId Int
     category   Category @relation(fields: [categoryId], references: [id])
+
+    vocabularyItemLevelId Int
+    level                 VocabularyItemLevel @relation(fields: [vocabularyItemLevelId], references: [id])
+}
+
+model VocabularyItemLevel {
+    id             Int              @id @default(autoincrement())
+    slug           String
+    name           String
+    VocabularyItem VocabularyItem[]
 }
