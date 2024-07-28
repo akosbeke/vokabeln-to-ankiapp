@@ -1,0 +1,36 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+model Module {
+    id    Int    @id @default(autoincrement())
+    email String
+
+    categories Category[]
+}
+
+model Category {
+    id       Int    @id @default(autoincrement())
+    name     String
+    moduleId Int
+    module   Module @relation(fields: [moduleId], references: [id])
+
+    vocabularyItems VocabularyItem[]
+}
+
+model VocabularyItem {
+    id              Int     @id @default(autoincrement())
+    word            String
+    meaning         String
+    ranking         Int
+    plural          String?
+    exampleSentence String?
+
+    categoryId Int
+    category   Category @relation(fields: [categoryId], references: [id])
+}
