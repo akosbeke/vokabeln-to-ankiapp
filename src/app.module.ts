@@ -8,6 +8,7 @@ import {
   categoryResource,
   vocabularyItemResource,
 } from './adminjs/resources';
+import { TranslatorModule } from './translator/translator.module';
 
 Promise.all([import('adminjs'), import('@adminjs/prisma')]).then(
   ([{ AdminJS }, { Database, Resource }]) => {
@@ -47,6 +48,7 @@ Promise.all([import('adminjs'), import('@adminjs/prisma')]).then(
           },
         }),
     ),
+    TranslatorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

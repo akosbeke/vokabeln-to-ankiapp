@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@prisma/client": "^5.17.0",
     "adminjs": "^7.8.7",
+    "deepl-node": "^1.13.0",
     "express-formidable": "^1.2.0",
     "express-session": "^1.18.0",
     "reflect-metadata": "^0.2.0",
