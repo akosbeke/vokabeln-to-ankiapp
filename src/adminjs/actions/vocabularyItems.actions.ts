@@ -1,5 +1,7 @@
 import type { ActionRequest } from 'adminjs' with { 'resolution-mode': 'require' };
 import { prismaClient } from 'src/prisma.service';
+import { TranslatorService } from 'src/translator/translator.service';
+import { ActionRequestWithResolver } from '../adminjs.loader';
 
 export const newHandler = async (request: ActionRequest) => {
   const {
@@ -13,8 +15,20 @@ export const newHandler = async (request: ActionRequest) => {
     level,
   } = request.payload;
 
-  // TODO: Call the DeepL service once it's implemented
-  const exampleSentenceTranslationContent = exampleSentenceTranslation;
+  let exampleSentenceTranslationContent = exampleSentenceTranslation;
+  if (!exampleSentenceTranslation && exampleSentence) {
+    const translatorService = (
+      request as ActionRequestWithResolver
+    ).resolver.get(TranslatorService, {
+      strict: false,
+    });
+
+    exampleSentenceTranslationContent = await translatorService.translate(
+      exampleSentence,
+      'de',
+      'hu',
+    );
+  }
 
   const vocabularyItem = await prismaClient.vocabularyItem.create({
     data: {
